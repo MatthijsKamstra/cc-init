@@ -1,10 +1,10 @@
+-lib cc-sketch
 -lib hxquicksettings
 -lib thx.color
 -lib hxColorToolkit
 -lib msignal
 -lib mloader
 -lib uglifyjs
--lib cc-sketch
 -cp src
 -main Main
 -js docs/cc_example.js
