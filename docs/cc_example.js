@@ -2163,7 +2163,7 @@ cc_util_ColorUtil.niceColor100SortedInt = [[14738636,11000792,6935271,15959600,1
 js_Boot.__toStr = ({ }).toString;
 model_constants_App.URL = "https://";
 model_constants_App.NAME = "[cc-init]";
-model_constants_App.BUILD = "2019-03-05 19:31:36";
+model_constants_App.BUILD = "2019-03-05 19:36:49";
 Main.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 
