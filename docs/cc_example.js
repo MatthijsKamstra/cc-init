@@ -121,7 +121,7 @@ var SketchOption = function() {
 	this._autopause = true;
 	this._autostart = true;
 	this._autoclear = true;
-	this._fullscreen = false;
+	this._fullscreen = true;
 };
 SketchOption.__name__ = ["SketchOption"];
 SketchOption.prototype = {
@@ -221,12 +221,13 @@ Sketch.createHiddenCanvas = function(name,option,isDebug) {
 	var body = window.document.querySelector("body");
 	var canvas = window.document.createElement("canvas");
 	body.appendChild(canvas);
+	var __w = Math.min(Global.w * 0.50,option.get_width());
 	canvas.setAttribute("id","hiddencanvas-" + name);
 	canvas.style.position = "absolute";
 	canvas.style.left = "0px";
 	canvas.style.top = "0px";
 	canvas.style.border = "1px solid pink";
-	canvas.style.width = "50%";
+	canvas.style.width = "" + __w + "px";
 	canvas.width = option.get_width();
 	canvas.height = option.get_height();
 	if(!isDebug) {
@@ -240,7 +241,8 @@ Sketch.prototype = {
 	createCanvas: function(name) {
 		var body = this.document.querySelector("body");
 		var container = this.document.createElement("div");
-		container.className = "container";
+		container.setAttribute("id","canvas-wrapper");
+		container.className = "canvas-wrapper-container";
 		this.canvas = this.document.createElement("canvas");
 		this.canvas.setAttribute("id",name);
 		body.appendChild(container);
@@ -525,7 +527,7 @@ art_CC100.prototype = $extend(SketchBase.prototype,{
 	}
 	,drawShape: function() {
 		this.ctx.clearRect(0,0,Global.w,Global.h);
-		cc_CanvasTools.backgroundObj(this.ctx,cc_util_ColorUtil.WHITE);
+		cc_CanvasTools.backgroundObj(this.ctx,this._color0);
 		if(this.isDebug) {
 			cc_util_ShapeUtil.gridField(this.ctx,this.grid);
 		}
@@ -536,7 +538,7 @@ art_CC100.prototype = $extend(SketchBase.prototype,{
 			var sh = this.shapeArray[i];
 		}
 		this.ctx.fillStyle = cc_util_ColorUtil.getColourObj(this._color4);
-		cc_util_FontUtil.centerFillText(this.ctx,"text",Global.w / 2,Global.h / 2,"'Oswald', sans-serif;",160);
+		cc_util_FontUtil.centerFillText(this.ctx,"" + this.toString(),Global.w / 2,Global.h / 2,"'Oswald', sans-serif;",260);
 		cc_CanvasTools.strokeColourRGB(this.ctx,this._color3);
 		cc_CanvasTools.strokeWeight(this.ctx,2);
 		cc_CanvasTools.circleStroke(this.ctx,this.dot.x,this.dot.y,20);
@@ -797,6 +799,9 @@ cc_CanvasTools.colourObj = function(ctx,rgb,a) {
 	ctx.fillStyle = c;
 };
 cc_CanvasTools.strokeColourObj = function(ctx,rgb,a) {
+	cc_CanvasTools.lineColour(ctx,rgb.r,rgb.g,rgb.b,a);
+};
+cc_CanvasTools.lineColourRGB = function(ctx,rgb,a) {
 	cc_CanvasTools.lineColour(ctx,rgb.r,rgb.g,rgb.b,a);
 };
 cc_CanvasTools.strokeColourRGB = function(ctx,rgb,a) {
@@ -2158,7 +2163,7 @@ cc_util_ColorUtil.niceColor100SortedInt = [[14738636,11000792,6935271,15959600,1
 js_Boot.__toStr = ({ }).toString;
 model_constants_App.URL = "https://";
 model_constants_App.NAME = "[cc-init]";
-model_constants_App.BUILD = "2019-03-01 21:46:48";
+model_constants_App.BUILD = "2019-03-05 19:31:36";
 Main.main();
 })(typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
 
