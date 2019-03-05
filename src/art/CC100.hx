@@ -90,7 +90,7 @@ class CC100 extends SketchBase {
 
 	function drawShape() {
 		ctx.clearRect(0, 0, w, h);
-		ctx.backgroundObj(WHITE);
+		ctx.backgroundObj(_color0);
 
 		if (isDebug) {
 			ShapeUtil.gridField(ctx, grid);
@@ -104,7 +104,7 @@ class CC100 extends SketchBase {
 		// ctx.xcross(w/2, h/2, 200);
 
 		ctx.fillStyle = getColourObj(_color4);
-		FontUtil.centerFillText(ctx, 'text', w / 2, h / 2, "'Oswald', sans-serif;", 160);
+		FontUtil.centerFillText(ctx, '${toString()}', w / 2, h / 2, "'Oswald', sans-serif;", 260);
 
 		ctx.strokeColourRGB(_color3);
 		ctx.strokeWeight(2);
