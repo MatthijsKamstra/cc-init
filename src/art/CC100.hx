@@ -21,7 +21,7 @@ class CC100 extends SketchBase {
 	// animate
 	var dot:Circle;
 
-	public function new() {
+	public function new(?ctx:CanvasRenderingContext2D) {
 		// setup Sketch
 		var option = new SketchOption();
 		option.width = 1080; // 1080
