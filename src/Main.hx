@@ -1,49 +1,71 @@
 package;
 
+import cc.model.constants.App;
 import js.Browser.*;
-import js.Browser;
-import js.html.*;
+import svg.*;
 
-import model.constants.App;
-
-// sketch
-import Sketch;
-import art.*;
-// settings
-import quicksettings.QuickSettings;
+using StringTools;
 
 class Main {
+	var count:Int;
+	var hash:String;
+	var ccTypeArray:Array<Class<Dynamic>> = [art.CC100];
 
-	// settings
-	var panel1:QuickSettings;
-
-	public function new () {
+	public function new() {
 		trace('START :: main');
 		document.addEventListener("DOMContentLoaded", function(event) {
-			console.log('${App.NAME} Dom ready :: build: ${App.BUILD} ');
+			console.log('${model.constants.App.NAME} Dom ready :: build: ${model.constants.App.getBuildDate()}');
 			var cc = new CC100();
+			// var cc = new svg.Calendar();
+			setupArt();
+			setupNav();
 		});
 	}
 
-	function createQuickSettings() {
-		// demo/basic example
-		panel1 = QuickSettings.create(10, 10, "Settings")
+	function setupArt() {
+		// get hash from url
+		hash = js.Browser.location.hash;
+		hash = hash.replace('#', '');
 
-			// .setGlobalChangeHandler(untyped setValues)
-			.addHTML("cc-paper", "different paper sizes and resolution").addDropDown('Mode', ['Portrait', 'Landscape'], function(obj) setMode(obj))
+		var clazz = Type.resolveClass('${hash}');
+		if (clazz == null) {
+			// make sure if it's not in the list, show the latest Sketch
+			clazz = ccTypeArray[ccTypeArray.length - 1];
+		}
+		count = ccTypeArray.indexOf(clazz);
+		var cc = Type.createInstance(clazz, []);
 
-			// .addDropDown('Paper size', Paper.ARR, function(obj) setPaper(obj)).addDropDown('DPI', DPI.ARR, function(obj) setDPI(obj))
-
-			// // .addTextArea('Quote', 'text', function(value) trace(value))
-			// .addTextArea('out', '', function(value) trace(value)) // .addBoolean('All Caps', false, function(value) trace(value))
-
-			.setKey('h') // use `h` to toggle menu
-
-			.saveInLocalStorage('cc-paper');
+		changeHash();
 	}
 
+	function setupNav() {
+		// make sure the browser updates after changing the hash
+		window.addEventListener("hashchange", function() {
+			location.reload();
+		}, false);
 
-	static public function main () {
-		var app = new Main ();
+		// use cursor key lef and right to switch sketches
+		window.addEventListener(KEY_DOWN, function(e:js.html.KeyboardEvent) {
+			switch (e.key) {
+				case 'ArrowRight':
+					count++;
+				case 'ArrowLeft':
+					count--;
+				case 'ArrowUp':
+					count = ccTypeArray.length - 1;
+				case 'ArrowDown':
+					count = 0;
+					// default : trace ("case '"+e.key+"': trace ('"+e.key+"');");
+			}
+			changeHash();
+		}, false);
+	}
+
+	function changeHash() {
+		location.hash = Type.getClassName(ccTypeArray[count]).replace('art.', '');
+	}
+
+	static public function main() {
+		var app = new Main();
 	}
 }
