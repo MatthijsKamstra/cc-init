@@ -26,7 +26,7 @@ class Main {
 		hash = js.Browser.location.hash;
 		hash = hash.replace('#', '');
 
-		var clazz = Type.resolveClass('${hash}');
+		var clazz = Type.resolveClass('art.${hash}');
 		if (clazz == null) {
 			// make sure if it's not in the list, show the latest Sketch
 			clazz = ccTypeArray[ccTypeArray.length - 1];
