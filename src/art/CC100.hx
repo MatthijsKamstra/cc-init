@@ -2,11 +2,10 @@ package art;
 
 import js.Browser.*;
 import js.html.*;
-import Sketch;
 
-class CC100 extends SketchBase {
+class CC100 extends SketcherBase {
 	var shapeArray:Array<Circle> = [];
-	var grid:GridUtil = new GridUtil();
+	var grid:GridUtil;
 	// sizes
 	var _radius = 150;
 	var _cellsize = 150;
@@ -21,31 +20,22 @@ class CC100 extends SketchBase {
 	// animate
 	var dot:Circle;
 
-	public function new(?ctx:CanvasRenderingContext2D) {
-		// setup Sketch
-		var option = new SketchOption();
-		option.width = 1080; // 1080
-		// option.height = 1000;
-		option.autostart = true;
-		option.padding = 10;
-		option.scale = true;
-		var ctx:CanvasRenderingContext2D = Sketch.create("creative_code_mck", option);
+	var fontFamly = 'Oswald:200,300,400,500,600,700';
 
-		init();
+	public function new() {
+		// use debug?
+		this.isDebug = true;
 
-		super(ctx);
+		super();
+		// embed files and then init
+		EmbedUtil.embedGoogleFont(fontFamly, init);
+		// init
 	}
 
 	function init() {
-		dot = createShape(100, {x: w / 2, y: h / 2});
-		// <link href="https://fonts.googleapis.com/css?family=Oswald:200,300,400,500,600,700" rel="stylesheet">
-		FontUtil.embedGoogleFont('Oswald:200,300,400,500,600,700', onEmbedHandler);
+		dot = createShape(100, {x: w2, y: h2});
 		createQuickSettings();
 		onAnimateHandler(dot);
-	}
-
-	function onEmbedHandler(e) {
-		trace('onEmbedHandler :: ${toString()} -> "${e}"');
 		drawShape();
 	}
 
@@ -89,11 +79,21 @@ class CC100 extends SketchBase {
 	}
 
 	function drawShape() {
-		ctx.clearRect(0, 0, w, h);
-		ctx.backgroundObj(_color0);
+		// reset previous sketch
+		sketch.clear();
 
+		// background color
+		var bg = sketch.makeRectangle(0, 0, w, h, false);
+		bg.id = "bg color";
+
+		// group
+		var bgGroup = sketch.makeGroup([bg]); // , bg1
+		bgGroup.id = "sketch background";
+		bgGroup.fill = getColourObj(BLACK); // BLACK
+
+		// quick generate grid
 		if (isDebug) {
-			ShapeUtil.gridField(ctx, grid);
+			sketcher.debug.Grid.gridDots(sketch, grid);
 		}
 
 		for (i in 0...shapeArray.length) {
@@ -103,13 +103,19 @@ class CC100 extends SketchBase {
 		// ctx.strokeColour(rgb.r, rgb.g, rgb.b);
 		// ctx.xcross(w/2, h/2, 200);
 
-		ctx.fillStyle = getColourObj(_color4);
-		FontUtil.centerFillText(ctx, '${toString()}', w / 2, h / 2, "'Oswald', sans-serif;", 260);
+		var text = sketch.makeText(toString(), w2, h2);
+		text.fontFamily = fontFamly;
+		text.fillColor = getColourObj(_color4);
 
-		ctx.strokeColourRGB(_color3);
-		ctx.strokeWeight(2);
-		ctx.circleStroke(dot.x, dot.y, 20);
+		var circle = sketch.makeCircle(dot.x, dot.y, 20);
+		circle.strokeWeight = 2;
+		circle.strokeColor = getColourObj(_color3);
+
+		// update sketch, to draw svg or canvas
+		sketch.update();
 	}
+
+	// ____________________________________ override ____________________________________
 
 	override function setup() {
 		trace('SETUP :: ${toString()}');
@@ -123,10 +129,11 @@ class CC100 extends SketchBase {
 
 		isDebug = true;
 
-		// grid.setDimension(w*2.1, h*2.1);
-		// grid.setNumbered(3,3);
+		// to grid
+		grid = new GridUtil(w, h);
 		grid.setCellSize(_cellsize);
-		grid.setIsCenterPoint(true);
+		// grid.setNumbered(3, 3); // 3 horizontal, 3 vertical
+		grid.setIsCenterPoint(true); // default true, but can be set if needed
 
 		shapeArray = [];
 		for (i in 0...grid.array.length) {

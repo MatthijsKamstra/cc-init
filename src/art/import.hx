@@ -1,31 +1,19 @@
 // quick and dirty import for Haxe JavaScript
 import js.Browser.*;
 import js.html.*;
-
 // easy access to Globals
-import Sketch.Global.*;
-
+import Sketcher.Globals.*;
 // easy access to the utils static funciton
-import cc.util.MathUtil.*;
-import cc.util.ColorUtil.*;
-import cc.util.AnimateUtil.*;
-
+import sketcher.util.MathUtil.*;
+import sketcher.util.ColorUtil.*;
 // utils
-import cc.util.ColorUtil;
-import cc.util.FontUtil;
-import cc.util.GridUtil;
-import cc.util.MathUtil;
-import cc.util.TextUtil;
+import sketcher.util.ColorUtil;
+import sketcher.util.GridUtil;
+import sketcher.util.MathUtil;
 // easy access to typedef
-import cc.AST;
-
-// syntactic sugar to extend CanvasRenderingContext2D
-using cc.CanvasTools;
-using cc.util.ShapeUtil;
-
+import sketcher.AST;
 // animation lib
-import cc.lets.Go;
-import cc.lets.easing.*;
-
+import sketcher.lets.Go;
+import sketcher.lets.easing.*;
 // settings
 import quicksettings.QuickSettings;

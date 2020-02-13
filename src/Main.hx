@@ -1,6 +1,5 @@
 package;
 
-import cc.model.constants.App;
 import js.Browser.*;
 import svg.*;
 
@@ -15,7 +14,7 @@ class Main {
 		trace('START :: main');
 		document.addEventListener("DOMContentLoaded", function(event) {
 			console.log('${model.constants.App.NAME} Dom ready :: build: ${model.constants.App.getBuildDate()}');
-			var cc = new CC100();
+			var cc = new art.CC100();
 			// var cc = new svg.Calendar();
 			setupArt();
 			setupNav();

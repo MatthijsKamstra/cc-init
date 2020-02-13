@@ -3,35 +3,25 @@
 import js.Browser.*;
 import js.html.*;
 // easy access to Globals
-import Sketch.Global.*;
+import Sketcher.Globals.*;
 // easy access to the utils static funciton
-import cc.util.MathUtil.*;
-import cc.util.ColorUtil.*;
-import cc.util.AnimateUtil.*;
+import sketcher.util.MathUtil.*;
+import sketcher.util.ColorUtil.*;
 // utils
-import cc.util.*;
-import cc.util.ColorUtil;
-import cc.util.GridUtil;
-import cc.util.MathUtil;
-import cc.util.TextUtil;
+import sketcher.util.*;
+import sketcher.util.ColorUtil;
+import sketcher.util.GridUtil;
+import sketcher.util.MathUtil;
 // easy access to typedef
-import cc.AST;
-import cc.draw.Text;
-
-// syntactic sugar to extend CanvasRenderingContext2D
-using cc.CanvasTools;
-using cc.util.ShapeUtil;
-
+import sketcher.AST;
+import sketcher.draw.Text;
 // animation lib
-import cc.lets.Go;
-import cc.lets.easing.*;
+import sketcher.lets.Go;
+import sketcher.lets.easing.*;
 // settings
 import js.Browser.*;
 import js.html.*;
-import Sketch;
-import Sketch.*;
-import cc.model.constants.App;
-import cc.tool.ExportFile;
+import sketcher.App;
 import js.html.*;
 import js.Browser.document;
 import js.Browser.window;
