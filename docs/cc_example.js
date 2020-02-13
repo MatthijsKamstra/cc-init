@@ -62,8 +62,7 @@ var Main = function() {
 	var _gthis = this;
 	console.log("src/Main.hx:14:","START :: main");
 	window.document.addEventListener("DOMContentLoaded",function(event) {
-		window.console.log("" + model_constants_App.NAME + " Dom ready :: build: " + "2020-02-13 10:16:09");
-		var cc = new art_CC100();
+		window.console.log("" + model_constants_App.NAME + " Dom ready :: build: " + "2020-02-13 11:17:36");
 		_gthis.setupArt();
 		_gthis.setupNav();
 	});
@@ -250,12 +249,12 @@ var Sketcher = function(settings) {
 	}
 	if(settings.get_scale() == true) {
 		var node = window.document.createElement("style");
-		node.innerHTML = "svg {width: 100%; height: 100%;}";
+		node.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {width: 100%; height: 100%;}\n\t\t\tcanvas{width: 100%; height: 100%;}\n\t\t\t";
 		window.document.body.appendChild(node);
 	}
 	if(settings.get_padding() != null && settings.get_padding() > 0) {
 		var node1 = window.document.createElement("style");
-		node1.innerHTML = "svg {margin: " + settings.get_padding() + "px; }";
+		node1.innerHTML = "\n\t\t\t.sketcher-wrapper{width: 100%; height: 100%; padding: 0; margin: 0; display: flex; align-items: center;\tjustify-content: center;}\n\t\t\tsvg {margin: " + settings.get_padding() + "px;}\n\t\t\tcanvas {margin: " + settings.get_padding() + "px;}\n\t\t\t";
 		window.document.body.appendChild(node1);
 	}
 };
@@ -292,7 +291,7 @@ Sketcher.prototype = {
 			element.appendChild(this.canvas);
 			break;
 		default:
-			console.log("Sketcher.hx:91:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
+			console.log("Sketcher.hx:99:","case '" + this.settings.get_type().toLowerCase() + "': trace ('" + this.settings.get_type().toLowerCase() + "');");
 		}
 		return this;
 	}
@@ -514,7 +513,7 @@ Sketcher.prototype = {
 			this.element.innerHTML = _xml;
 			break;
 		case "webgl":
-			console.log("Sketcher.hx:516:","webgl");
+			console.log("Sketcher.hx:524:","webgl");
 			var _g3 = 0;
 			var _g12 = this.baseArray.length;
 			while(_g3 < _g12) {
@@ -527,7 +526,7 @@ Sketcher.prototype = {
 			}
 			break;
 		default:
-			console.log("Sketcher.hx:525:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
+			console.log("Sketcher.hx:533:","case '" + this.settings.get_type() + "': trace ('" + this.settings.get_type() + "');");
 		}
 	}
 	,__class__: Sketcher
@@ -541,8 +540,17 @@ var SketcherBase = function(settings) {
 	if(this.isDebug) {
 		console.log("SketcherBase.hx:26:","START :: " + this.toString());
 	}
+	if(settings == null) {
+		var stageW = 1080;
+		var stageH = 1080;
+		settings = new Settings(stageW,stageH,"canvas");
+		settings.set_autostart(true);
+		settings.set_padding(10);
+		settings.set_scale(false);
+		settings.set_elementID("sketcher-canvas-wrapper");
+	}
 	if(settings != null && settings.get_element() != null) {
-		console.log("SketcherBase.hx:31:",settings.get_element());
+		console.log("SketcherBase.hx:41:",settings.get_element());
 	}
 	if(settings.get_elementID() != null && window.document.getElementById(settings.get_elementID()) == null) {
 		var div0 = window.document.createElement("div");
@@ -581,12 +589,12 @@ SketcherBase.prototype = {
 	}
 	,setup: function() {
 		if(this.isDebug) {
-			console.log("SketcherBase.hx:93:","SETUP :: " + this.toString() + " -> override public function draw()");
+			console.log("SketcherBase.hx:104:","SETUP :: " + this.toString() + " -> override public function draw()");
 		}
 	}
 	,draw: function() {
 		if(this.isDebug) {
-			console.log("SketcherBase.hx:101:","DRAW :: " + this.toString() + " -> override public function draw()");
+			console.log("SketcherBase.hx:112:","DRAW :: " + this.toString() + " -> override public function draw()");
 		}
 	}
 	,__export: function() {
@@ -918,6 +926,19 @@ Xml.prototype = {
 };
 var art_CC100 = function() {
 	this.fontFamly = "Oswald:200,300,400,500,600,700";
+	this.color3 = { h : 350, s : 0.9, v : 0.3};
+	this.color2 = [0,128,255,0.3];
+	this.color1 = [0,128,255];
+	this.color0 = "#ffae23";
+	this.explode = function() {
+		console.log("src/art/CC100.hx:31:","booom");
+	};
+	this.maxSize = 0.8;
+	this.growthSpeed = 0.8;
+	this.noiseStrength = 0.8;
+	this.displayOutline = false;
+	this.speed = 0.8;
+	this.message = "dat.gui";
 	this._color4 = null;
 	this._color3 = null;
 	this._color2 = null;
@@ -928,23 +949,53 @@ var art_CC100 = function() {
 	this.shapeArray = [];
 	this.isDebug = true;
 	SketcherBase.call(this);
-	sketcher_util_EmbedUtil.embedGoogleFont(this.fontFamly,$bind(this,this.init));
+	sketcher_util_EmbedUtil.embedGoogleFont(this.fontFamly,$bind(this,this.drawShape));
+	sketcher_util_EmbedUtil.datgui($bind(this,this.initDatGui2));
 };
 $hxClasses["art.CC100"] = art_CC100;
 art_CC100.__name__ = "art.CC100";
 art_CC100.__super__ = SketcherBase;
 art_CC100.prototype = $extend(SketcherBase.prototype,{
-	init: function() {
-		this.dot = this.createShape(100,{ x : this.get_w2(), y : this.get_h2()});
-		this.createQuickSettings();
-		this.onAnimateHandler(this.dot);
-		this.drawShape();
+	initDatGui2: function() {
+		var text = new art_FizzyText();
+		var gui = new dat.gui.GUI();
+		gui.add(text,"message");
+		gui.add(text,"speed",-5,5);
+		gui.add(text,"displayOutline");
+		gui.add(text,"explode");
+	}
+	,initDatGui: function() {
+		var gui = new dat.gui.GUI();
+		gui.add(this,"message");
+		gui.add(this,"speed",-5,5);
+		gui.add(this,"displayOutline");
+		gui.add(this,"explode");
+		var f1 = gui.addFolder("Flow Field");
+		f1.add(this,"speed");
+		f1.add(this,"noiseStrength");
+		var f2 = gui.addFolder("Letters");
+		f2.add(this,"growthSpeed");
+		f2.add(this,"maxSize");
+		f2.add(this,"message");
+		gui.add(this,"message",["pizza","chrome","hooray"]);
+		gui.add(this,"speed",{ Stopped : 0, Slow : 0.1, Fast : 5});
+		gui.addColor(this,"color0");
+		gui.addColor(this,"color1");
+		gui.addColor(this,"color2");
+		gui.addColor(this,"color3");
+		var controller = gui.add(this,"maxSize",0,10);
+		controller.onChange(function(value) {
+			console.log("src/art/CC100.hx:94:","value: " + value);
+		});
+		controller.onFinishChange(function(value1) {
+			window.alert(Std.string("The new value is " + value1));
+		});
 	}
 	,createQuickSettings: function() {
 		this.panel1 = QuickSettings.create(10,10,"Settings").setGlobalChangeHandler($bind(this,this.drawShape)).addHTML("Reason","Sometimes I need to find the best settings").addTextArea("Quote","text",function(value) {
-			console.log("src/art/CC100.hx:49:",value);
+			console.log("src/art/CC100.hx:110:",value);
 		}).addBoolean("All Caps",false,function(value1) {
-			console.log("src/art/CC100.hx:50:",value1);
+			console.log("src/art/CC100.hx:111:",value1);
 		}).setKey("h").saveInLocalStorage("store-data-" + this.toString());
 	}
 	,createShape: function(i,point) {
@@ -995,12 +1046,15 @@ art_CC100.prototype = $extend(SketcherBase.prototype,{
 		_this5._options.onCompleteParams = [obj];
 	}
 	,drawShape: function() {
+		if(this.dot == null) {
+			return;
+		}
 		this.sketch.clear();
 		var bg = this.sketch.makeRectangle(0,0,Globals.w,Globals.h,false);
 		bg.set_id("bg color");
 		var bgGroup = this.sketch.makeGroup([bg]);
 		bgGroup.set_id("sketch background");
-		bgGroup.set_fill(sketcher_util_ColorUtil.getColourObj(sketcher_util_ColorUtil.BLACK));
+		bgGroup.set_fill(sketcher_util_ColorUtil.getColourObj(this._color1));
 		if(this.isDebug) {
 			sketcher_debug_Grid.gridDots(this.sketch,this.grid);
 		}
@@ -1012,14 +1066,21 @@ art_CC100.prototype = $extend(SketcherBase.prototype,{
 		}
 		var text = this.sketch.makeText(this.toString(),this.get_w2(),this.get_h2());
 		text.set_fontFamily(this.fontFamly);
+		text.set_fontSizePx(100);
+		text.set_fontWeight("800");
+		text.set_textAlign(sketcher_draw_TextAlignType.Center);
 		text.set_fillColor(sketcher_util_ColorUtil.getColourObj(this._color4));
-		var circle = this.sketch.makeCircle(this.dot.x,this.dot.y,20);
-		circle.set_strokeWeight(2);
+		var circle = this.sketch.makeCircle(this.dot.x,this.dot.y,50);
+		circle.set_strokeWeight(10);
 		circle.set_strokeColor(sketcher_util_ColorUtil.getColourObj(this._color3));
+		circle.set_fillOpacity(0);
 		this.sketch.update();
 	}
 	,setup: function() {
-		console.log("src/art/CC100.hx:121:","SETUP :: " + this.toString());
+		console.log("src/art/CC100.hx:187:","SETUP :: " + this.toString());
+		this.dot = this.createShape(100,{ x : this.get_w2(), y : this.get_h2()});
+		this.createQuickSettings();
+		this.onAnimateHandler(this.dot);
 		var colorArray = sketcher_util_ColorUtil.niceColor100SortedString[sketcher_util_MathUtil.randomInt(sketcher_util_ColorUtil.niceColor100SortedString.length - 1)];
 		var int = Std.parseInt(StringTools.replace(colorArray[0],"#","0x"));
 		this._color0 = { r : int >> 16 & 255, g : int >> 8 & 255, b : int & 255};
@@ -1048,6 +1109,19 @@ art_CC100.prototype = $extend(SketcherBase.prototype,{
 	}
 	,__class__: art_CC100
 });
+var art_FizzyText = function() {
+	this.explode = function() {
+		console.log("src/art/CC100.hx:226:","BOOM");
+	};
+	this.displayOutline = false;
+	this.speed = 0.8;
+	this.message = "dat.gui";
+};
+$hxClasses["art.FizzyText"] = art_FizzyText;
+art_FizzyText.__name__ = "art.FizzyText";
+art_FizzyText.prototype = {
+	__class__: art_FizzyText
+};
 var haxe_IMap = function() { };
 $hxClasses["haxe.IMap"] = haxe_IMap;
 haxe_IMap.__name__ = "haxe.IMap";
@@ -3340,6 +3414,9 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 		if(this.get_fontSize() == null) {
 			this.set_fontSize("16px");
 		}
+		if(this.get_fontSizePx() != null) {
+			this.set_fontSize("" + this.get_fontSizePx());
+		}
 		var _css = "";
 		var _font = StringTools.ltrim("" + _css + " " + Std.parseInt(this.get_fontSize()) + "px " + this.get_fontFamily());
 		ctx.font = _font;
@@ -3433,6 +3510,7 @@ sketcher_draw_Text.prototype = $extend(sketcher_draw_Base.prototype,{
 		return this.fontFamily;
 	}
 	,set_fontFamily: function(value) {
+		value = StringTools.replace(value,"+"," ").split(":")[0];
 		this.xml.set("font-family",value);
 		return this.fontFamily = value;
 	}
@@ -5168,7 +5246,7 @@ haxe_xml_Parser.escapes = (function($this) {
 	$r = h;
 	return $r;
 }(this));
-model_constants_App.NAME = "[cc-init]";
+model_constants_App.NAME = "[cc-handdrawn]";
 sketcher_App.NAME = "[cc-sketcher]";
 sketcher_draw_Base.COUNT = 0;
 sketcher_lets_Go._tweens = [];
